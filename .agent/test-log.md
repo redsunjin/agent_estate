@@ -38,3 +38,9 @@ Record RED/GREEN evidence and TDD exceptions here.
 - Validation passed: `npm run smoke`.
 - Validation passed: `scripts/agent-harness.sh`.
 - Generated `.agent-estate/report.md` from `.agent-estate/report.json`.
+
+## 2026-06-10 Slice 5
+
+- RED: updated `scripts/validate-project.mjs` to require VS Code command shell registration and report command tokens; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-command error.
+- GREEN: implemented `apps/vscode-extension/src/extension.ts` command registration for scan, open report, and export Markdown report; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
+- TDD note: command shell remains fixture-only. Real local read-only discovery is intentionally deferred to Slice 6.

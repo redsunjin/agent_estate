@@ -69,6 +69,6 @@ Add an `examples/egovframe5` workflow that shows how a public-sector project can
 2. Define the report JSON shape.
 3. Implement config path discovery.
 4. Generate a Markdown report.
-5. Add a VS Code command: `Agent Estate: Scan Environment`.
-6. Add an eGovFrame checklist document.
-
+5. Add a VS Code command: `Agent Estate: Scan Environment`. Done for fixture-based scan flow.
+6. Add read-only local discovery for selected safe config surfaces.
+7. Add an eGovFrame checklist document.

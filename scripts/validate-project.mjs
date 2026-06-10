@@ -93,8 +93,25 @@ for (const requiredToken of [
 
 if (args.has("--smoke")) {
   const extensionSource = readFileSync(path.join(root, "apps/vscode-extension/src/extension.ts"), "utf8");
-  assert(extensionSource.includes("activate"), "VS Code extension placeholder must export activate.");
-  assert(extensionSource.includes("deactivate"), "VS Code extension placeholder must export deactivate.");
+  assert(extensionSource.includes("activate"), "VS Code extension must export activate.");
+  assert(extensionSource.includes("deactivate"), "VS Code extension must export deactivate.");
+  for (const commandId of [
+    "agentEstate.scanEnvironment",
+    "agentEstate.openReport",
+    "agentEstate.exportMarkdownReport"
+  ]) {
+    assert(extensionSource.includes(commandId), `VS Code extension must register command: ${commandId}`);
+  }
+  for (const requiredToken of [
+    "registerCommand",
+    "runScript",
+    "generate-fixture-report.mjs",
+    "render-markdown-report.mjs",
+    ".agent-estate/report.md",
+    "showTextDocument"
+  ]) {
+    assert(extensionSource.includes(requiredToken), `VS Code command shell missing required token: ${requiredToken}`);
+  }
 }
 
 console.log("Agent Estate project metadata validation passed.");

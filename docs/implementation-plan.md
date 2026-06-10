@@ -16,7 +16,7 @@ This phase is design-only. Do not implement scanning behavior yet. The immediate
 - [x] Define report schema in `packages/shared`
 - [x] Add fixture-based collector prototype
 - [x] Add Markdown report renderer
-- [ ] Add VS Code command shell
+- [x] Add VS Code command shell
 - [ ] Run harness after each slice
 
 ## Planned Build Slices
@@ -66,6 +66,8 @@ Add command registration for:
 - `Agent Estate: Scan Environment`
 - `Agent Estate: Open Report`
 - `Agent Estate: Export Markdown Report`
+
+Status: completed with VS Code command registration and fixture-based report generation/open/export shell. Real read-only discovery remains deferred to Slice 6.
 
 ### Slice 6: Real Read-Only Discovery
 

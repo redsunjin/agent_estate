@@ -15,7 +15,7 @@ Design Agent Estate MVP feature development for a VS Code-first AI agent and MCP
 - [x] Shared report schema defines metadata, environment, inventory, risk, eGovFrame checklist, and recommendations.
 - [x] Future implementation can generate `report.json` from fixtures.
 - [x] Future implementation can render `report.md` from `report.json`.
-- [ ] Future VS Code command can trigger the scan flow.
+- [x] Future VS Code command can trigger the fixture scan flow.
 - [ ] Future policy layer can classify findings as `ok`, `review`, `risky`, or `unknown`.
 
 ## Test Mapping
@@ -28,9 +28,9 @@ Design Agent Estate MVP feature development for a VS Code-first AI agent and MCP
 | Report schema exists | `npm run check` | DONE |
 | Fixture report generation | `npm run fixture:report` | DONE |
 | Markdown report rendering | `npm run report:markdown` | DONE |
-| Future fixture report generation | TBD | TODO |
-| Future Markdown rendering | TBD | TODO |
-| Future VS Code command registration | TBD | TODO |
+| VS Code command registration | `npm run smoke` | DONE |
+| Fixture scan command shell | `npm run smoke` | DONE |
+| Future policy layer classification | TBD | TODO |
 
 ## Manual Review Checklist
 

@@ -17,12 +17,11 @@ Only skip TDD for docs-only changes, pure styling with no testable behavior, or 
 
 ## Current Phase
 
-This is a design-only phase, so TDD is not applied to product behavior yet.
+The project has moved into implementation slices. Behavior changes should use the RED/GREEN loop before implementation when a focused validation can cover the behavior.
 
 Future behavior changes should start with tests for:
 
 - fixture-to-report generation
 - Markdown report rendering
 - policy risk classification
-- VS Code command registration
 - eGovFrame checklist generation

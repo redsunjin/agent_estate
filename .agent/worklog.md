@@ -74,3 +74,11 @@
 - Confirmed `redsunjin/agent_estate` did not yet exist, then created it as a public GitHub repository.
 - Updated local remote target from `redsunjin/agnet_estate` to `redsunjin/agent_estate`.
 - Left the typo repository untouched because the user said they would delete it.
+
+## 2026-06-10T13:40:00+0900
+
+- Started Slice 5 using the existing Superpowers-lite project harness.
+- Added RED validation for VS Code command registration and fixture report command shell tokens.
+- Implemented `Agent Estate: Scan Environment`, `Agent Estate: Open Report`, and `Agent Estate: Export Markdown Report` command handlers.
+- Kept Slice 5 fixture-only; real local read-only discovery remains the next slice.
+- Verified focused RED/GREEN with `scripts/test-red.sh` and `scripts/test-green.sh` around `npm run smoke`.

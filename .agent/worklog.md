@@ -67,3 +67,10 @@
 - User requested synchronization to `https://github.com/redsunjin/agnet_estate`.
 - Confirmed the target GitHub repository exists and is public.
 - Updated local remote target from `redsunjin/agent-estate` to `redsunjin/agnet_estate`.
+
+## 2026-06-10T12:58:00+0900
+
+- User clarified the correct repository is `https://github.com/redsunjin/agent_estate`; `agnet_estate` was a typo.
+- Confirmed `redsunjin/agent_estate` did not yet exist, then created it as a public GitHub repository.
+- Updated local remote target from `redsunjin/agnet_estate` to `redsunjin/agent_estate`.
+- Left the typo repository untouched because the user said they would delete it.

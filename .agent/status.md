@@ -5,6 +5,6 @@
 - Detected mode: fixture report and Markdown renderer prototype
 - Method: superpowers-lite
 - Next action: add VS Code command shell
-- Git state: branch `main` tracks `origin/main`; remote `https://github.com/redsunjin/agnet_estate`
+- Git state: branch `main` tracks `origin/main`; remote `https://github.com/redsunjin/agent_estate`
 - Latest validation: `scripts/agent-harness.sh` passed on 2026-06-10 after Git baseline setup
 - Blockers: `codex` CLI command was not available in PATH during this session; Superpowers-lite project harness was used locally instead

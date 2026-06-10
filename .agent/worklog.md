@@ -61,3 +61,9 @@
 - Created private GitHub repository `redsunjin/agent-estate`.
 - Added `origin` remote at `https://github.com/redsunjin/agent-estate.git`.
 - Pushed local `main` and configured it to track `origin/main`.
+
+## 2026-06-10T12:50:00+0900
+
+- User requested synchronization to `https://github.com/redsunjin/agnet_estate`.
+- Confirmed the target GitHub repository exists and is public.
+- Updated local remote target from `redsunjin/agent-estate` to `redsunjin/agnet_estate`.

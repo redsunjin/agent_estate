@@ -1,0 +1,73 @@
+{
+  "workspaceRoot": "/fixtures/egovframe-sample",
+  "platform": "darwin",
+  "workspaceType": "egovframe",
+  "projectSignals": [
+    {
+      "kind": "pom.xml",
+      "label": "Maven project file",
+      "path": "pom.xml",
+      "evidence": "fixture only"
+    },
+    {
+      "kind": "egovframe-dependency",
+      "label": "eGovFrame dependency marker",
+      "path": "pom.xml",
+      "evidence": "org.egovframe.rte"
+    }
+  ],
+  "agents": [
+    {
+      "id": "codex-cli",
+      "name": "Codex CLI",
+      "kind": "cli",
+      "version": "fixture",
+      "executablePath": "/fixtures/bin/codex",
+      "configPaths": [],
+      "riskLevel": "review",
+      "riskSurfaces": ["filesystem", "shell"]
+    }
+  ],
+  "mcpServers": [
+    {
+      "id": "local-filesystem",
+      "name": "Local Filesystem MCP",
+      "transport": "stdio",
+      "command": "npx @modelcontextprotocol/server-filesystem",
+      "configPath": ".fixture/mcp.json",
+      "declaredTools": ["read_file", "list_directory"],
+      "riskLevel": "review",
+      "riskSurfaces": ["filesystem"]
+    }
+  ],
+  "plugins": [
+    {
+      "id": "agent-estate-vscode",
+      "name": "Agent Estate VS Code",
+      "host": "vscode",
+      "version": "0.1.0",
+      "path": "apps/vscode-extension",
+      "riskLevel": "ok"
+    }
+  ],
+  "packages": [
+    {
+      "id": "agent-estate-shared",
+      "name": "@agent-estate/shared",
+      "manager": "npm",
+      "version": "0.1.0",
+      "path": "packages/shared",
+      "relatedToAgentTooling": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "permissions": [
+    {
+      "id": "fixture-filesystem-read",
+      "surface": "filesystem",
+      "subject": "Fixture collector",
+      "level": "ok",
+      "description": "Fixture collector reads fixture JSON only."
+    }
+  ]
+}

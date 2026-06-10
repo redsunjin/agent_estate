@@ -1,0 +1,13 @@
+{
+  "name": "@agent-estate/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared constants and future report model types for Agent Estate.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "check": "node ../../scripts/validate-project.mjs --package @agent-estate/shared"
+  },
+  "devDependencies": {}
+}

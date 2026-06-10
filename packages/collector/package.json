@@ -1,0 +1,16 @@
+{
+  "name": "@agent-estate/collector",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Read-only discovery and report generation package for Agent Estate.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "check": "node ../../scripts/validate-project.mjs --package @agent-estate/collector"
+  },
+  "dependencies": {
+    "@agent-estate/shared": "workspace:*"
+  },
+  "devDependencies": {}
+}

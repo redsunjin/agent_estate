@@ -1,0 +1,22 @@
+{
+  "name": "agent-estate",
+  "version": "0.1.0",
+  "private": true,
+  "description": "VS Code-first AI agent and MCP governance tooling for local audit reports.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "check": "node scripts/validate-project.mjs",
+    "fixture:report": "node scripts/generate-fixture-report.mjs",
+    "report:markdown": "node scripts/render-markdown-report.mjs",
+    "smoke": "node scripts/validate-project.mjs --smoke && npm run fixture:report && npm run report:markdown -- --check"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {}
+}

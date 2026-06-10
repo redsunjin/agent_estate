@@ -149,7 +149,13 @@ if (args.has("--smoke")) {
     "generate-readonly-report.mjs",
     "render-markdown-report.mjs",
     ".agent-estate/report.md",
-    "showTextDocument"
+    "showTextDocument",
+    "REPORT_JSON_PATH",
+    "readReportSummary",
+    "formatScanCompleteMessage",
+    "Review:",
+    "Risky:",
+    "Unknown:"
   ]) {
     assert(extensionSource.includes(requiredToken), `VS Code command shell missing required token: ${requiredToken}`);
   }

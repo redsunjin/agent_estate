@@ -109,3 +109,12 @@
 - Reworded the eGovFrame checklist section as an audit checklist.
 - Preserved fixture compatibility by deriving risk summary counts even when policy summary metadata is absent.
 - Verified focused RED/GREEN with `scripts/test-red.sh` and `scripts/test-green.sh` around `npm run smoke`.
+
+## 2026-06-10T18:45:00+0900
+
+- Started Slice 9 using the existing Superpowers-lite project harness.
+- Added RED validation for VS Code scan completion summary UX.
+- Updated the scan command to read `.agent-estate/report.json` after discovery and render.
+- Added completion message with report path plus review, risky, and unknown counts.
+- Kept the command read-only and local; no report upload or config mutation was added.
+- Verified focused RED/GREEN with `scripts/test-red.sh` and `scripts/test-green.sh` around `npm run smoke`.

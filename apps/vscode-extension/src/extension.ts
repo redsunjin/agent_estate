@@ -1,5 +1,5 @@
 import { execFile } from "node:child_process";
-import { copyFile, mkdir } from "node:fs/promises";
+import { copyFile, mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
 import * as vscode from "vscode";
@@ -7,7 +7,16 @@ import * as vscode from "vscode";
 const execFileAsync = promisify(execFile);
 
 const REPORT_DIRECTORY = ".agent-estate";
+const REPORT_JSON_PATH = ".agent-estate/report.json";
 const REPORT_MARKDOWN_PATH = ".agent-estate/report.md";
+
+interface ScanSummary {
+  readonly totalFindings: number;
+  readonly ok: number;
+  readonly review: number;
+  readonly risky: number;
+  readonly unknown: number;
+}
 
 interface CommandShell {
   scanEnvironment(): Promise<void>;
@@ -31,6 +40,7 @@ function createCommandShell(context: vscode.ExtensionContext): CommandShell {
   const extensionRoot = context.extensionUri.fsPath;
   const repositoryRoot = path.resolve(extensionRoot, "../..");
   const reportDirectory = path.join(repositoryRoot, REPORT_DIRECTORY);
+  const jsonReportPath = path.join(repositoryRoot, REPORT_JSON_PATH);
   const markdownReportPath = path.join(repositoryRoot, REPORT_MARKDOWN_PATH);
 
   async function runScript(scriptName: string, args: string[] = []): Promise<void> {
@@ -43,6 +53,35 @@ function createCommandShell(context: vscode.ExtensionContext): CommandShell {
     await runScript("render-markdown-report.mjs");
   }
 
+  async function readReportSummary(): Promise<ScanSummary> {
+    const report = JSON.parse(await readFile(jsonReportPath, "utf8"));
+    const byLevel = report.policyClassificationSummary?.byLevel ?? {};
+    const findings = [
+      ...(report.agents ?? []),
+      ...(report.mcpServers ?? []),
+      ...(report.plugins ?? []),
+      ...(report.packages ?? [])
+    ];
+
+    return {
+      totalFindings: report.policyClassificationSummary?.totalFindings ?? findings.length,
+      ok: byLevel.ok ?? findings.filter((finding) => finding.riskLevel === "ok").length,
+      review: byLevel.review ?? findings.filter((finding) => finding.riskLevel === "review").length,
+      risky: byLevel.risky ?? findings.filter((finding) => finding.riskLevel === "risky").length,
+      unknown: byLevel.unknown ?? findings.filter((finding) => finding.riskLevel === "unknown").length
+    };
+  }
+
+  function formatScanCompleteMessage(summary: ScanSummary): string {
+    return [
+      "Agent Estate read-only scan complete.",
+      `Report: ${REPORT_MARKDOWN_PATH}`,
+      `Review: ${summary.review}`,
+      `Risky: ${summary.risky}`,
+      `Unknown: ${summary.unknown}`
+    ].join(" ");
+  }
+
   async function openReport(): Promise<void> {
     const document = await vscode.workspace.openTextDocument(markdownReportPath);
     await vscode.window.showTextDocument(document, { preview: false });
@@ -51,7 +90,8 @@ function createCommandShell(context: vscode.ExtensionContext): CommandShell {
   return {
     async scanEnvironment(): Promise<void> {
       await renderReadOnlyReport();
-      await vscode.window.showInformationMessage("Agent Estate read-only scan complete.");
+      const summary = await readReportSummary();
+      await vscode.window.showInformationMessage(formatScanCompleteMessage(summary));
       await openReport();
     },
 

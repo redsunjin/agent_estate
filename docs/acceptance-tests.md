@@ -19,6 +19,7 @@ Design Agent Estate MVP feature development for a VS Code-first AI agent and MCP
 - [x] Read-only discovery can generate a real local report without collecting config values.
 - [x] Policy layer can classify findings as `ok`, `review`, `risky`, or `unknown`.
 - [x] Markdown report shows review-first summary and audit checklist wording.
+- [x] VS Code scan command reports review/risky/unknown counts after scan.
 
 ## Test Mapping
 
@@ -35,6 +36,7 @@ Design Agent Estate MVP feature development for a VS Code-first AI agent and MCP
 | Read-only discovery report generation | `npm run discovery:report -- --check` | DONE |
 | Policy layer classification | `npm run discovery:report -- --check` | DONE |
 | Review-first Markdown report | `npm run report:markdown -- --check` | DONE |
+| VS Code scan summary UX | `npm run smoke` | DONE |
 
 ## Manual Review Checklist
 

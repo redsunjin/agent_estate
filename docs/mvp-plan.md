@@ -73,4 +73,5 @@ Add an `examples/egovframe5` workflow that shows how a public-sector project can
 6. Add read-only local discovery for selected safe config surfaces. Done for path/executable metadata.
 7. Add policy classification for discovered surfaces. Done for rule-based read-only metadata classification.
 8. Improve Markdown report quality. Done for review-first summary and audit checklist wording.
-9. Add an eGovFrame checklist document.
+9. Add minimal VS Code scan result UX. Done for report path and review/risky/unknown counts.
+10. Add an eGovFrame checklist document.

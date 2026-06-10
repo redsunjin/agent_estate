@@ -20,6 +20,7 @@ This phase is design-only. Do not implement scanning behavior yet. The immediate
 - [x] Add real read-only discovery prototype
 - [x] Add policy classification for discovered surfaces
 - [x] Upgrade Markdown report quality
+- [x] Add minimal VS Code scan result UX
 - [ ] Run harness after each slice
 
 ## Planned Build Slices
@@ -113,6 +114,20 @@ Report improvements:
 4. compatibility with both fixture and read-only discovery reports
 
 Status: completed with review-first Markdown output and smoke validation.
+
+### Slice 9: VS Code UX Minimum
+
+Give the user actionable completion feedback when they run `Agent Estate: Scan Environment`.
+
+Minimum UX:
+
+1. run read-only discovery and Markdown rendering
+2. read the generated local report summary
+3. show the report path
+4. show `review`, `risky`, and `unknown` counts
+5. open the Markdown report
+
+Status: completed with a scan completion message that summarizes review counts while preserving local-only behavior.
 
 ## Design Constraints
 

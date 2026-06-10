@@ -38,8 +38,8 @@ function createCommandShell(context: vscode.ExtensionContext): CommandShell {
     await execFileAsync(process.execPath, [scriptPath, ...args], { cwd: repositoryRoot });
   }
 
-  async function renderFixtureReport(): Promise<void> {
-    await runScript("generate-fixture-report.mjs");
+  async function renderReadOnlyReport(): Promise<void> {
+    await runScript("generate-readonly-report.mjs");
     await runScript("render-markdown-report.mjs");
   }
 
@@ -50,18 +50,18 @@ function createCommandShell(context: vscode.ExtensionContext): CommandShell {
 
   return {
     async scanEnvironment(): Promise<void> {
-      await renderFixtureReport();
-      await vscode.window.showInformationMessage("Agent Estate fixture scan complete.");
+      await renderReadOnlyReport();
+      await vscode.window.showInformationMessage("Agent Estate read-only scan complete.");
       await openReport();
     },
 
     async openReport(): Promise<void> {
-      await renderFixtureReport();
+      await renderReadOnlyReport();
       await openReport();
     },
 
     async exportMarkdownReport(): Promise<void> {
-      await renderFixtureReport();
+      await renderReadOnlyReport();
       const destination = await vscode.window.showSaveDialog({
         defaultUri: vscode.Uri.file(path.join(repositoryRoot, "agent-estate-report.md")),
         filters: {

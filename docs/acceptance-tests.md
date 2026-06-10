@@ -16,6 +16,7 @@ Design Agent Estate MVP feature development for a VS Code-first AI agent and MCP
 - [x] Future implementation can generate `report.json` from fixtures.
 - [x] Future implementation can render `report.md` from `report.json`.
 - [x] Future VS Code command can trigger the fixture scan flow.
+- [x] Read-only discovery can generate a real local report without collecting config values.
 - [ ] Future policy layer can classify findings as `ok`, `review`, `risky`, or `unknown`.
 
 ## Test Mapping
@@ -30,11 +31,12 @@ Design Agent Estate MVP feature development for a VS Code-first AI agent and MCP
 | Markdown report rendering | `npm run report:markdown` | DONE |
 | VS Code command registration | `npm run smoke` | DONE |
 | Fixture scan command shell | `npm run smoke` | DONE |
+| Read-only discovery report generation | `npm run discovery:report -- --check` | DONE |
 | Future policy layer classification | TBD | TODO |
 
 ## Manual Review Checklist
 
 - [x] The design does not start by claiming official eGovFrame certification.
 - [x] The first feature slice can be built without touching sensitive local config.
-- [x] Real machine scanning is deferred until fixtures and schema are stable.
+- [x] Real machine scanning starts with read-only path metadata only.
 - [x] Public-sector audit/reporting use is visible in the design.

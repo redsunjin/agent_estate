@@ -44,3 +44,10 @@ Record RED/GREEN evidence and TDD exceptions here.
 - RED: updated `scripts/validate-project.mjs` to require VS Code command shell registration and report command tokens; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-command error.
 - GREEN: implemented `apps/vscode-extension/src/extension.ts` command registration for scan, open report, and export Markdown report; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
 - TDD note: command shell remains fixture-only. Real local read-only discovery is intentionally deferred to Slice 6.
+
+## 2026-06-10 Slice 6
+
+- RED: added validation requirements for `scripts/generate-readonly-report.mjs`, collector read-only discovery tokens, and the `discovery:report` smoke step; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-file error.
+- GREEN: added read-only discovery report generation, updated VS Code scan command to use it, and confirmed `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
+- Generated `.agent-estate/report.json` and `.agent-estate/report.md` from live read-only metadata for local verification.
+- Safety note: discovery records path and executable metadata only; it does not read config values or include evidence excerpts.

@@ -17,6 +17,7 @@ This phase is design-only. Do not implement scanning behavior yet. The immediate
 - [x] Add fixture-based collector prototype
 - [x] Add Markdown report renderer
 - [x] Add VS Code command shell
+- [x] Add real read-only discovery prototype
 - [ ] Run harness after each slice
 
 ## Planned Build Slices
@@ -80,6 +81,8 @@ Initial discovery order:
 3. known MCP client config paths
 4. agent CLI path discovery
 5. package inventory
+
+Status: completed as a safe first pass. Discovery records path/executable metadata only, does not read config values, and keeps secret redaction explicit in the checklist. Deeper policy classification remains deferred.
 
 ## Design Constraints
 

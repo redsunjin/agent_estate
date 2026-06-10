@@ -82,3 +82,12 @@
 - Implemented `Agent Estate: Scan Environment`, `Agent Estate: Open Report`, and `Agent Estate: Export Markdown Report` command handlers.
 - Kept Slice 5 fixture-only; real local read-only discovery remains the next slice.
 - Verified focused RED/GREEN with `scripts/test-red.sh` and `scripts/test-green.sh` around `npm run smoke`.
+
+## 2026-06-10T14:25:00+0900
+
+- Started Slice 6 using the existing Superpowers-lite project harness.
+- Added `scripts/generate-readonly-report.mjs` for real read-only local discovery.
+- Discovery covers workspace `.agent-estate` settings, OpenClaw config surfaces, known MCP client config paths, agent CLI PATH discovery, and package manager PATH discovery.
+- Updated VS Code scan/open/export commands to use read-only discovery instead of fixture generation.
+- Kept discovery metadata-only: no config values, no secret collection, no mutation.
+- Verified focused RED/GREEN with `scripts/test-red.sh` and `scripts/test-green.sh` around `npm run smoke`.

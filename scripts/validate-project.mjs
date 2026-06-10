@@ -33,6 +33,7 @@ const requiredFiles = [
   "packages/collector/src/index.ts",
   "packages/collector/fixtures/sample-environment.json",
   "scripts/generate-fixture-report.mjs",
+  "scripts/generate-readonly-report.mjs",
   "scripts/render-markdown-report.mjs",
   "packages/policy/package.json",
   "packages/policy/src/index.ts"
@@ -48,6 +49,7 @@ assert(Array.isArray(rootPackage.workspaces), "Root package must define workspac
 assert(rootPackage.workspaces.includes("apps/*"), "Root workspaces must include apps/*.");
 assert(rootPackage.workspaces.includes("packages/*"), "Root workspaces must include packages/*.");
 assert(rootPackage.scripts?.check === "node scripts/validate-project.mjs", "Root check script must run project validation.");
+assert(rootPackage.scripts?.["discovery:report"] === "node scripts/generate-readonly-report.mjs", "Root discovery script must run read-only discovery report generation.");
 
 const extensionPackage = readJson("apps/vscode-extension/package.json");
 const commands = extensionPackage.contributes?.commands ?? [];
@@ -72,6 +74,17 @@ for (const packagePath of [
 
 const sharedIndexSource = readFileSync(path.join(root, "packages/shared/src/index.ts"), "utf8");
 assert(sharedIndexSource.includes("./report"), "Shared index must export the report schema module.");
+
+const collectorSource = readFileSync(path.join(root, "packages/collector/src/index.ts"), "utf8");
+for (const requiredToken of [
+  "READ_ONLY_DISCOVERY_STATUS",
+  "READ_ONLY_DISCOVERY_SURFACES",
+  "openclaw-config",
+  "mcp-client-config",
+  "agent-cli-path"
+]) {
+  assert(collectorSource.includes(requiredToken), `Collector missing read-only discovery token: ${requiredToken}`);
+}
 
 const reportSchemaSource = readFileSync(path.join(root, "packages/shared/src/report.ts"), "utf8");
 for (const requiredToken of [
@@ -105,7 +118,7 @@ if (args.has("--smoke")) {
   for (const requiredToken of [
     "registerCommand",
     "runScript",
-    "generate-fixture-report.mjs",
+    "generate-readonly-report.mjs",
     "render-markdown-report.mjs",
     ".agent-estate/report.md",
     "showTextDocument"

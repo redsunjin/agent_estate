@@ -5,5 +5,6 @@
 - Detected mode: fixture report and Markdown renderer prototype
 - Method: superpowers-lite
 - Next action: add VS Code command shell
-- Latest validation: `npm run check`, `npm run smoke`, `npm run fixture:report`, `npm run report:markdown`, and `scripts/agent-harness.sh` passed on 2026-06-08 after Slice 4 Markdown renderer
+- Git state: initialized on branch `main`; latest baseline commit `91b8919` created on 2026-06-10; no remote configured yet
+- Latest validation: `scripts/agent-harness.sh` passed on 2026-06-10 after Git baseline setup
 - Blockers: `codex` CLI command was not available in PATH during this session; Superpowers-lite project harness was used locally instead

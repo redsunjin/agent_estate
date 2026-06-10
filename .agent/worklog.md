@@ -45,3 +45,13 @@
 - Generated `.agent-estate/report.md` from `.agent-estate/report.json`.
 - Verified with `npm run check`, `npm run smoke`, and `scripts/agent-harness.sh`.
 - Next slice is VS Code command shell.
+
+## 2026-06-10T12:40:00+0900
+
+- Checked version-control state after user asked whether progress was being managed in Git.
+- Confirmed `agent-estate` was not yet a Git repository.
+- Added `.gitignore` for Node build artifacts and generated `.agent-estate/` reports.
+- Initialized Git on branch `main`.
+- Created initial baseline commit `91b8919` with the current Agent Estate project files.
+- Verified with `scripts/agent-harness.sh`.
+- Remote sync remains pending until a remote URL is provided and push is explicitly approved.

@@ -55,3 +55,9 @@
 - Created initial baseline commit `91b8919` with the current Agent Estate project files.
 - Verified with `scripts/agent-harness.sh`.
 - Remote sync remains pending until a remote URL is provided and push is explicitly approved.
+
+## 2026-06-10T12:45:00+0900
+
+- Created private GitHub repository `redsunjin/agent-estate`.
+- Added `origin` remote at `https://github.com/redsunjin/agent-estate.git`.
+- Pushed local `main` and configured it to track `origin/main`.

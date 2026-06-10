@@ -100,3 +100,12 @@
 - Kept classification secret-safe: it only uses metadata already present in the read-only discovery report.
 - Added Markdown policy classification summary plus plugin and package manager sections.
 - Verified focused RED/GREEN with `scripts/test-red.sh` and `scripts/test-green.sh` around `npm run smoke`.
+
+## 2026-06-10T18:35:00+0900
+
+- Started Slice 8 using the existing Superpowers-lite project harness.
+- Added RED validation for review-first Markdown report sections.
+- Added `Risk Summary` and `Review Queue` near the top of the generated report.
+- Reworded the eGovFrame checklist section as an audit checklist.
+- Preserved fixture compatibility by deriving risk summary counts even when policy summary metadata is absent.
+- Verified focused RED/GREEN with `scripts/test-red.sh` and `scripts/test-green.sh` around `npm run smoke`.

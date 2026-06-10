@@ -20,6 +20,27 @@ function riskBadge(level) {
   return level.toUpperCase();
 }
 
+function allClassifiedFindings(report) {
+  return [
+    ...report.agents.map((item) => ({ ...item, category: "Agent", label: item.name })),
+    ...report.mcpServers.map((item) => ({ ...item, category: "MCP", label: item.name })),
+    ...report.plugins.map((item) => ({ ...item, category: "OpenClaw/Plugin", label: item.name })),
+    ...report.packages.map((item) => ({ ...item, category: "Package", label: item.name }))
+  ];
+}
+
+function reviewPriority(level) {
+  return { risky: 0, review: 1, unknown: 2, ok: 3 }[level] ?? 4;
+}
+
+function markdownTable(headers, rows) {
+  return [
+    `| ${headers.join(" | ")} |`,
+    `| ${headers.map(() => "---").join(" | ")} |`,
+    ...rows.map((row) => `| ${row.join(" | ")} |`)
+  ];
+}
+
 function renderEvidence(evidenceItems) {
   if (!evidenceItems?.length) {
     return "  - Evidence: none recorded";
@@ -31,6 +52,69 @@ function renderEvidence(evidenceItems) {
       return `  - Evidence: ${item.label}${pathText}`;
     })
     .join("\n");
+}
+
+function renderRiskSummaryTable(report) {
+  const findings = allClassifiedFindings(report);
+  const summary = report.policyClassificationSummary ?? {
+    byLevel: findings.reduce((counts, item) => {
+      counts[item.riskLevel] = (counts[item.riskLevel] ?? 0) + 1;
+      return counts;
+    }, { ok: 0, review: 0, risky: 0, unknown: 0 })
+  };
+
+  return [
+    "## Risk Summary",
+    "",
+    ...markdownTable(
+      ["Level", "Count", "Audit Meaning"],
+      [
+        ["OK", String(summary.byLevel.ok), "Expected low-risk metadata"],
+        ["REVIEW", String(summary.byLevel.review), "Review before approval"],
+        ["RISKY", String(summary.byLevel.risky), "Block or escalate before use"],
+        ["UNKNOWN", String(summary.byLevel.unknown), "Classify before approval"]
+      ]
+    ),
+    ""
+  ];
+}
+
+function renderReviewQueue(report) {
+  const reviewItems = allClassifiedFindings(report)
+    .filter((item) => ["risky", "review", "unknown"].includes(item.riskLevel))
+    .sort((left, right) => reviewPriority(left.riskLevel) - reviewPriority(right.riskLevel));
+
+  if (!reviewItems.length) {
+    return ["## Review Queue", "", "No review queue items were found.", ""];
+  }
+
+  return [
+    "## Review Queue",
+    "",
+    ...markdownTable(
+      ["Priority", "Category", "Item", "Reason"],
+      reviewItems.map((item) => [
+        riskBadge(item.riskLevel),
+        item.category,
+        item.label,
+        item.policyClassification?.ruleIds?.join(", ") ?? "manual review"
+      ])
+    ),
+    ""
+  ];
+}
+
+function auditChecklistLabel(item) {
+  const auditLabels = {
+    "project-signal": "Project signal reviewed for eGovFrame relevance",
+    "read-only-scan": "Read-only scan boundary verified",
+    "secret-redaction": "Secret and credential collection excluded",
+    "external-send-review": "External transmission behavior requires review",
+    "human-approval-path": "Human approval path remains explicit",
+    "audit-report-export": "Audit report export path verified"
+  };
+
+  return auditLabels[item.id] ?? item.label;
 }
 
 function renderPolicySummary(summary) {
@@ -65,6 +149,8 @@ function renderReport(report) {
     bullet(`MCP servers: ${report.mcpServers.length}`),
     bullet(`Risk findings: ${report.riskFindings.length}`),
     "",
+    ...renderRiskSummaryTable(report),
+    ...renderReviewQueue(report),
     ...renderPolicySummary(report.policyClassificationSummary),
     "## Environment",
     "",
@@ -104,9 +190,9 @@ function renderReport(report) {
     lines.push(`### ${finding.title}`, "", bullet(`Level: ${riskBadge(finding.level)}`), bullet(`Surfaces: ${finding.surfaces.join(", ")}`), "", finding.summary, "", renderEvidence(finding.evidence), "");
   }
 
-  lines.push("## eGovFrame Checklist", "");
+  lines.push("## Audit Checklist", "");
   for (const item of report.egovFrameChecklist) {
-    lines.push(bullet(`${item.label}: ${item.status}`));
+    lines.push(bullet(`${auditChecklistLabel(item)}: ${item.status}`));
   }
 
   lines.push("", "## Recommendations", "");
@@ -124,8 +210,14 @@ if (!markdown.includes("# Agent Estate Audit Report")) {
   throw new Error("Rendered report is missing the title.");
 }
 
-if (!markdown.includes("## Risk Findings") || !markdown.includes("## eGovFrame Checklist")) {
+if (!markdown.includes("## Risk Findings") || !markdown.includes("## Audit Checklist")) {
   throw new Error("Rendered report is missing required audit sections.");
+}
+
+for (const requiredText of ["## Review Queue", "## Risk Summary", "Review before approval"]) {
+  if (!markdown.includes(requiredText)) {
+    throw new Error(`Rendered report is missing report quality section: ${requiredText}`);
+  }
 }
 
 if (args.has("--check")) {

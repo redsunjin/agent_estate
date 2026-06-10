@@ -58,3 +58,10 @@ Record RED/GREEN evidence and TDD exceptions here.
 - GREEN: added policy classifier rules, wired read-only discovery findings through classification, and confirmed `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
 - Generated `.agent-estate/report.json` and `.agent-estate/report.md` from live read-only metadata for local verification.
 - Safety note: policy classification remains metadata-only and does not read config values or secret contents.
+
+## 2026-06-10 Slice 8
+
+- RED: updated `scripts/validate-project.mjs` to require review-first Markdown report quality tokens; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-renderer-token error.
+- GREEN: added risk summary table, review queue table, and audit checklist wording; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
+- Generated `.agent-estate/report.md` from live read-only metadata and confirmed review items are shown near the top.
+- Safety note: report quality changes only reorganize existing metadata; no deeper config reads were added.

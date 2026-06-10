@@ -19,6 +19,7 @@ This phase is design-only. Do not implement scanning behavior yet. The immediate
 - [x] Add VS Code command shell
 - [x] Add real read-only discovery prototype
 - [x] Add policy classification for discovered surfaces
+- [x] Upgrade Markdown report quality
 - [ ] Run harness after each slice
 
 ## Planned Build Slices
@@ -99,6 +100,19 @@ Initial classification rules:
 6. unmatched surfaces are `unknown`
 
 Status: completed with rule-based classification, report evidence, and Markdown summary. Classification remains secret-safe and metadata-only.
+
+### Slice 8: Report Quality Upgrade
+
+Make the generated Markdown report useful as a review artifact instead of only a raw inventory dump.
+
+Report improvements:
+
+1. risk summary table near the top
+2. review queue that lists `risky`, `review`, and `unknown` items before detailed inventory
+3. audit-oriented checklist wording
+4. compatibility with both fixture and read-only discovery reports
+
+Status: completed with review-first Markdown output and smoke validation.
 
 ## Design Constraints
 

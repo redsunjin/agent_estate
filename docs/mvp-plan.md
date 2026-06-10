@@ -72,4 +72,5 @@ Add an `examples/egovframe5` workflow that shows how a public-sector project can
 5. Add a VS Code command: `Agent Estate: Scan Environment`. Done for fixture-based scan flow.
 6. Add read-only local discovery for selected safe config surfaces. Done for path/executable metadata.
 7. Add policy classification for discovered surfaces. Done for rule-based read-only metadata classification.
-8. Add an eGovFrame checklist document.
+8. Improve Markdown report quality. Done for review-first summary and audit checklist wording.
+9. Add an eGovFrame checklist document.

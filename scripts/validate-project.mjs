@@ -153,6 +153,18 @@ if (args.has("--smoke")) {
   ]) {
     assert(extensionSource.includes(requiredToken), `VS Code command shell missing required token: ${requiredToken}`);
   }
+
+  const markdownSource = readFileSync(path.join(root, "scripts/render-markdown-report.mjs"), "utf8");
+  for (const requiredToken of [
+    "renderReviewQueue",
+    "renderRiskSummaryTable",
+    "## Review Queue",
+    "## Risk Summary",
+    "Audit Checklist",
+    "Review before approval"
+  ]) {
+    assert(markdownSource.includes(requiredToken), `Markdown report quality missing required token: ${requiredToken}`);
+  }
 }
 
 console.log("Agent Estate project metadata validation passed.");

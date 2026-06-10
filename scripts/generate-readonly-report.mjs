@@ -3,6 +3,11 @@ import { accessSync, constants, existsSync, mkdirSync, statSync, writeFileSync }
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  classifyDiscoveredSurface,
+  policyClassificationSummary,
+  policyEvidence
+} from "./policy-classifier.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = new Set(process.argv.slice(2));
@@ -18,6 +23,16 @@ function evidence(kind, label, itemPath) {
     label,
     ...(itemPath ? { path: itemPath } : {}),
     redacted: true
+  };
+}
+
+function withPolicyClassification(item, type) {
+  const classification = classifyDiscoveredSurface({ ...item, type });
+  return {
+    ...item,
+    riskLevel: classification.level,
+    policyClassification: classification,
+    evidence: [...(item.evidence ?? []), policyEvidence(classification)]
   };
 }
 
@@ -99,14 +114,15 @@ function discoverOpenClawPlugins() {
     { name: "OpenClaw Telegram bindings", path: path.join(homeDirectory, ".openclaw/telegram/thread-bindings-default.json") }
   ]);
 
-  return [...openClawDirectories, ...openClawFiles].map((item, index) => ({
-    id: `openclaw-config-${index + 1}`,
-    name: item.name,
-    host: "openclaw",
-    path: safeRelativeOrAbsolute(item.path),
-    riskLevel: "review",
-    evidence: [evidence("config", `Detected read-only OpenClaw surface: ${item.name}`, safeRelativeOrAbsolute(item.path))]
-  }));
+  return [...openClawDirectories, ...openClawFiles].map((item, index) =>
+    withPolicyClassification({
+      id: `openclaw-config-${index + 1}`,
+      name: item.name,
+      host: "openclaw",
+      path: safeRelativeOrAbsolute(item.path),
+      evidence: [evidence("config", `Detected read-only OpenClaw surface: ${item.name}`, safeRelativeOrAbsolute(item.path))]
+    }, "plugin")
+  );
 }
 
 function discoverMcpServers() {
@@ -118,16 +134,17 @@ function discoverMcpServers() {
     { name: "Agent Estate workspace settings", path: path.join(root, ".agent-estate/settings.json") }
   ]);
 
-  return candidates.map((item, index) => ({
-    id: `mcp-client-config-${index + 1}`,
-    name: item.name,
-    transport: "unknown",
-    configPath: safeRelativeOrAbsolute(item.path),
-    declaredTools: [],
-    riskLevel: "review",
-    riskSurfaces: ["unknown"],
-    evidence: [evidence("config", `Detected MCP client config path: ${item.name}`, safeRelativeOrAbsolute(item.path))]
-  }));
+  return candidates.map((item, index) =>
+    withPolicyClassification({
+      id: `mcp-client-config-${index + 1}`,
+      name: item.name,
+      transport: "unknown",
+      configPath: safeRelativeOrAbsolute(item.path),
+      declaredTools: [],
+      riskSurfaces: ["unknown"],
+      evidence: [evidence("config", `Detected MCP client config path: ${item.name}`, safeRelativeOrAbsolute(item.path))]
+    }, "mcpServer")
+  );
 }
 
 function discoverAgentExecutables() {
@@ -150,16 +167,15 @@ function discoverAgentExecutables() {
       return [];
     }
 
-    return [{
+    return [withPolicyClassification({
       id: `agent-cli-path-${command}`,
       name,
       kind: "cli",
       executablePath,
       configPaths: [],
-      riskLevel: "review",
       riskSurfaces: ["filesystem", "shell"],
       evidence: [evidence("command", `Detected executable on PATH: ${command}`, executablePath)]
-    }];
+    }, "agent")];
   });
 }
 
@@ -180,15 +196,14 @@ function discoverPackageManagers() {
       return [];
     }
 
-    return [{
+    return [withPolicyClassification({
       id: `package-manager-path-${command}`,
       name: command,
       manager,
       path: executablePath,
       relatedToAgentTooling: false,
-      riskLevel: "ok",
       evidence: [evidence("command", `Detected package manager executable on PATH: ${command}`, executablePath)]
-    }];
+    }, "package")];
   });
 }
 
@@ -208,7 +223,7 @@ function buildReport() {
   const packages = discoverPackageManagers();
   const signals = projectSignals();
 
-  return {
+  const report = {
     schemaVersion: "0.1",
     metadata: {
       reportId: "read-only-agent-estate-report",
@@ -240,6 +255,15 @@ function buildReport() {
     ],
     riskFindings: [
       {
+        id: "policy-classification-summary",
+        level: agents.some((agent) => agent.riskLevel === "risky") ? "risky" : agents.length || mcpServers.length || plugins.length ? "review" : "ok",
+        surfaces: ["filesystem"],
+        title: "Policy classification applied to discovered surfaces",
+        summary: "Rule-based policy classification labeled discovered agent, MCP, OpenClaw, and package surfaces without reading config contents.",
+        relatedFindingIds: [...agents.map((agent) => agent.id), ...mcpServers.map((server) => server.id), ...plugins.map((plugin) => plugin.id), ...packages.map((item) => item.id)],
+        evidence: [evidence("manual-note", "Policy classification is secret-safe and uses metadata only")]
+      },
+      {
         id: "read-only-discovery-review",
         level: agents.length || mcpServers.length || plugins.length ? "review" : "ok",
         surfaces: ["filesystem"],
@@ -261,12 +285,17 @@ function buildReport() {
       {
         id: "review-read-only-discovery-results",
         priority: "medium",
-        title: "Review read-only discovery results before enabling real policy checks",
-        rationale: "The initial real discovery slice only identifies local path surfaces and does not classify detailed tool behavior.",
-        action: "Confirm which discovered config and CLI surfaces should be included in Slice 7 policy classification.",
-        relatedRiskFindingIds: ["read-only-discovery-review"]
+        title: "Review policy-classified local agent and MCP surfaces",
+        rationale: "Rule-based classification now separates ok, review, risky, and unknown items while keeping discovery secret-safe.",
+        action: "Review items marked review or unknown before approving AI agent tooling in a public-sector workspace.",
+        relatedRiskFindingIds: ["policy-classification-summary", "read-only-discovery-review"]
       }
     ]
+  };
+
+  return {
+    ...report,
+    policyClassificationSummary: policyClassificationSummary(report)
   };
 }
 
@@ -279,6 +308,16 @@ function assertCheck(report) {
   }
   if (!report.egovFrameChecklist.some((item) => item.id === "secret-redaction" && item.status === "pass")) {
     throw new Error("Read-only report must explicitly pass secret redaction.");
+  }
+  const classifiedFindings = [...report.agents, ...report.mcpServers, ...report.plugins, ...report.packages];
+  if (!classifiedFindings.every((item) => item.policyClassification && ["ok", "review", "risky", "unknown"].includes(item.riskLevel))) {
+    throw new Error("All discovered surfaces must include policy classification.");
+  }
+  if (!classifiedFindings.every((item) => item.evidence.some((entry) => entry.label.startsWith("Policy classification")))) {
+    throw new Error("All discovered surfaces must include policy classification evidence.");
+  }
+  if (!report.riskFindings.some((item) => item.id === "policy-classification-summary")) {
+    throw new Error("Read-only report must include a policy-classification risk summary.");
   }
   const serialized = JSON.stringify(report);
   if (serialized.includes("apiKey") || serialized.includes("password") || serialized.includes("tokenValue")) {

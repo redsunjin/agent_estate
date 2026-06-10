@@ -33,6 +33,24 @@ function renderEvidence(evidenceItems) {
     .join("\n");
 }
 
+function renderPolicySummary(summary) {
+  if (!summary) {
+    return [];
+  }
+
+  return [
+    "## Policy Classification",
+    "",
+    bullet(`Status: ${summary.status}`),
+    bullet(`Total classified findings: ${summary.totalFindings}`),
+    bullet(`OK: ${summary.byLevel.ok}`),
+    bullet(`Review: ${summary.byLevel.review}`),
+    bullet(`Risky: ${summary.byLevel.risky}`),
+    bullet(`Unknown: ${summary.byLevel.unknown}`),
+    ""
+  ];
+}
+
 function renderReport(report) {
   const lines = [
     "# Agent Estate Audit Report",
@@ -47,6 +65,7 @@ function renderReport(report) {
     bullet(`MCP servers: ${report.mcpServers.length}`),
     bullet(`Risk findings: ${report.riskFindings.length}`),
     "",
+    ...renderPolicySummary(report.policyClassificationSummary),
     "## Environment",
     "",
     bullet(`Platform: ${report.environment.platform}`),
@@ -68,6 +87,16 @@ function renderReport(report) {
   lines.push("## MCP Servers", "");
   for (const server of report.mcpServers) {
     lines.push(`### ${server.name}`, "", bullet(`Transport: ${server.transport}`), bullet(`Risk: ${riskBadge(server.riskLevel)}`), bullet(`Tools: ${server.declaredTools.join(", ") || "none declared"}`), renderEvidence(server.evidence), "");
+  }
+
+  lines.push("## OpenClaw And Plugins", "");
+  for (const plugin of report.plugins) {
+    lines.push(`### ${plugin.name}`, "", bullet(`Host: ${plugin.host}`), bullet(`Risk: ${riskBadge(plugin.riskLevel)}`), renderEvidence(plugin.evidence), "");
+  }
+
+  lines.push("## Package Managers", "");
+  for (const packageFinding of report.packages) {
+    lines.push(`### ${packageFinding.name}`, "", bullet(`Manager: ${packageFinding.manager}`), bullet(`Risk: ${riskBadge(packageFinding.riskLevel)}`), renderEvidence(packageFinding.evidence), "");
   }
 
   lines.push("## Risk Findings", "");

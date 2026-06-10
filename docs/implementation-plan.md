@@ -18,6 +18,7 @@ This phase is design-only. Do not implement scanning behavior yet. The immediate
 - [x] Add Markdown report renderer
 - [x] Add VS Code command shell
 - [x] Add real read-only discovery prototype
+- [x] Add policy classification for discovered surfaces
 - [ ] Run harness after each slice
 
 ## Planned Build Slices
@@ -82,7 +83,22 @@ Initial discovery order:
 4. agent CLI path discovery
 5. package inventory
 
-Status: completed as a safe first pass. Discovery records path/executable metadata only, does not read config values, and keeps secret redaction explicit in the checklist. Deeper policy classification remains deferred.
+Status: completed as a safe first pass. Discovery records path/executable metadata only, does not read config values, and keeps secret redaction explicit in the checklist.
+
+### Slice 7: Policy Classification
+
+Classify discovered read-only surfaces without reading deeper config contents.
+
+Initial classification rules:
+
+1. package manager path metadata is `ok`
+2. agent CLI shell/filesystem surfaces are `review`
+3. MCP client config path surfaces are `review`
+4. OpenClaw runtime/plugin surfaces are `review`
+5. secret surfaces are `risky`
+6. unmatched surfaces are `unknown`
+
+Status: completed with rule-based classification, report evidence, and Markdown summary. Classification remains secret-safe and metadata-only.
 
 ## Design Constraints
 

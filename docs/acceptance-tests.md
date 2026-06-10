@@ -17,7 +17,7 @@ Design Agent Estate MVP feature development for a VS Code-first AI agent and MCP
 - [x] Future implementation can render `report.md` from `report.json`.
 - [x] Future VS Code command can trigger the fixture scan flow.
 - [x] Read-only discovery can generate a real local report without collecting config values.
-- [ ] Future policy layer can classify findings as `ok`, `review`, `risky`, or `unknown`.
+- [x] Policy layer can classify findings as `ok`, `review`, `risky`, or `unknown`.
 
 ## Test Mapping
 
@@ -32,7 +32,7 @@ Design Agent Estate MVP feature development for a VS Code-first AI agent and MCP
 | VS Code command registration | `npm run smoke` | DONE |
 | Fixture scan command shell | `npm run smoke` | DONE |
 | Read-only discovery report generation | `npm run discovery:report -- --check` | DONE |
-| Future policy layer classification | TBD | TODO |
+| Policy layer classification | `npm run discovery:report -- --check` | DONE |
 
 ## Manual Review Checklist
 

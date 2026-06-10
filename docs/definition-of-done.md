@@ -10,15 +10,17 @@ superpowers-lite
 
 ## Required Local Validation
 
-- No deterministic check command detected yet.
+- `npm run check`
+- `npm run smoke`
+- `scripts/agent-harness.sh`
 
 ## Smoke Validation
 
-- No smoke command detected yet.
+- `npm run smoke`
 
 ## Completion Criteria
 
-- For this design phase, implementation is not required.
+- Implementation slices should preserve the read-only and secret-safe MVP boundary.
 - The project harness is bootstrapped with Superpowers-lite.
 - The first feature slice is documented.
 - Acceptance tests for the design phase are documented.
@@ -30,5 +32,5 @@ superpowers-lite
 
 ## Detection Notes
 
-- No deterministic project commands detected.
+- Deterministic project commands are now available through npm scripts and the project harness.
 - Method explicitly selected: superpowers-lite.

@@ -34,6 +34,7 @@ const requiredFiles = [
   "packages/collector/fixtures/sample-environment.json",
   "scripts/generate-fixture-report.mjs",
   "scripts/generate-readonly-report.mjs",
+  "scripts/policy-classifier.mjs",
   "scripts/render-markdown-report.mjs",
   "packages/policy/package.json",
   "packages/policy/src/index.ts"
@@ -86,6 +87,21 @@ for (const requiredToken of [
   assert(collectorSource.includes(requiredToken), `Collector missing read-only discovery token: ${requiredToken}`);
 }
 
+const policySource = readFileSync(path.join(root, "packages/policy/src/index.ts"), "utf8");
+for (const requiredToken of [
+  "POLICY_CLASSIFICATION_STATUS",
+  "POLICY_RISK_RULES",
+  "classifyDiscoveredSurface",
+  "PolicyClassification",
+  "ok",
+  "review",
+  "risky",
+  "unknown",
+  "secret-safe"
+]) {
+  assert(policySource.includes(requiredToken), `Policy package missing classification token: ${requiredToken}`);
+}
+
 const reportSchemaSource = readFileSync(path.join(root, "packages/shared/src/report.ts"), "utf8");
 for (const requiredToken of [
   "AgentEstateReport",
@@ -97,6 +113,8 @@ for (const requiredToken of [
   "PermissionFinding",
   "RiskFinding",
   "Recommendation",
+  "FindingPolicyClassification",
+  "PolicyClassificationSummary",
   "EGOVFRAME_CHECKLIST_ITEM_IDS",
   "RISK_LEVELS",
   "RISK_SURFACES"
@@ -105,6 +123,16 @@ for (const requiredToken of [
 }
 
 if (args.has("--smoke")) {
+  const readonlySource = readFileSync(path.join(root, "scripts/generate-readonly-report.mjs"), "utf8");
+  for (const requiredToken of [
+    "classifyDiscoveredSurface",
+    "policyClassificationSummary",
+    "policy-classification",
+    "Policy classification"
+  ]) {
+    assert(readonlySource.includes(requiredToken), `Read-only report missing policy classification token: ${requiredToken}`);
+  }
+
   const extensionSource = readFileSync(path.join(root, "apps/vscode-extension/src/extension.ts"), "utf8");
   assert(extensionSource.includes("activate"), "VS Code extension must export activate.");
   assert(extensionSource.includes("deactivate"), "VS Code extension must export deactivate.");

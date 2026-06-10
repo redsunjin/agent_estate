@@ -51,3 +51,10 @@ Record RED/GREEN evidence and TDD exceptions here.
 - GREEN: added read-only discovery report generation, updated VS Code scan command to use it, and confirmed `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
 - Generated `.agent-estate/report.json` and `.agent-estate/report.md` from live read-only metadata for local verification.
 - Safety note: discovery records path and executable metadata only; it does not read config values or include evidence excerpts.
+
+## 2026-06-10 Slice 7
+
+- RED: updated `scripts/validate-project.mjs` to require `scripts/policy-classifier.mjs` and policy classification tokens; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-file error.
+- GREEN: added policy classifier rules, wired read-only discovery findings through classification, and confirmed `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
+- Generated `.agent-estate/report.json` and `.agent-estate/report.md` from live read-only metadata for local verification.
+- Safety note: policy classification remains metadata-only and does not read config values or secret contents.

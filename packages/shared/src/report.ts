@@ -40,6 +40,7 @@ export interface AgentEstateReport {
   readonly riskFindings: readonly RiskFinding[];
   readonly egovFrameChecklist: readonly EgovFrameChecklistItem[];
   readonly recommendations: readonly Recommendation[];
+  readonly policyClassificationSummary?: PolicyClassificationSummary;
 }
 
 export interface ReportMetadata {
@@ -83,6 +84,7 @@ export interface AgentFinding {
   readonly riskLevel: RiskLevel;
   readonly riskSurfaces: readonly RiskSurface[];
   readonly evidence: readonly EvidenceItem[];
+  readonly policyClassification?: FindingPolicyClassification;
 }
 
 export interface McpServerFinding {
@@ -96,6 +98,7 @@ export interface McpServerFinding {
   readonly riskLevel: RiskLevel;
   readonly riskSurfaces: readonly RiskSurface[];
   readonly evidence: readonly EvidenceItem[];
+  readonly policyClassification?: FindingPolicyClassification;
 }
 
 export interface PluginFinding {
@@ -106,6 +109,7 @@ export interface PluginFinding {
   readonly path?: string;
   readonly riskLevel: RiskLevel;
   readonly evidence: readonly EvidenceItem[];
+  readonly policyClassification?: FindingPolicyClassification;
 }
 
 export interface PackageFinding {
@@ -117,6 +121,7 @@ export interface PackageFinding {
   readonly relatedToAgentTooling: boolean;
   readonly riskLevel: RiskLevel;
   readonly evidence: readonly EvidenceItem[];
+  readonly policyClassification?: FindingPolicyClassification;
 }
 
 export interface PermissionFinding {
@@ -152,6 +157,20 @@ export interface Recommendation {
   readonly rationale: string;
   readonly action: string;
   readonly relatedRiskFindingIds: readonly string[];
+}
+
+export interface FindingPolicyClassification {
+  readonly status: string;
+  readonly level: RiskLevel;
+  readonly ruleIds: readonly string[];
+  readonly rationale: string;
+  readonly secretHandling: "secret-safe";
+}
+
+export interface PolicyClassificationSummary {
+  readonly status: string;
+  readonly totalFindings: number;
+  readonly byLevel: Record<RiskLevel, number>;
 }
 
 export interface EvidenceItem {

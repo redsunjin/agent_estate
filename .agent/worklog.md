@@ -91,3 +91,12 @@
 - Updated VS Code scan/open/export commands to use read-only discovery instead of fixture generation.
 - Kept discovery metadata-only: no config values, no secret collection, no mutation.
 - Verified focused RED/GREEN with `scripts/test-red.sh` and `scripts/test-green.sh` around `npm run smoke`.
+
+## 2026-06-10T18:20:00+0900
+
+- Started Slice 7 using the existing Superpowers-lite project harness.
+- Added RED validation for a policy classification module and read-only report policy classification tokens.
+- Added rule-based policy classification for discovered agents, MCP client config paths, OpenClaw surfaces, and package manager paths.
+- Kept classification secret-safe: it only uses metadata already present in the read-only discovery report.
+- Added Markdown policy classification summary plus plugin and package manager sections.
+- Verified focused RED/GREEN with `scripts/test-red.sh` and `scripts/test-green.sh` around `npm run smoke`.

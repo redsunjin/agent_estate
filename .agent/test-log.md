@@ -91,3 +91,10 @@ Record RED/GREEN evidence and TDD exceptions here.
 - RED: updated `scripts/validate-project.mjs` to require `egovframe-pom`, `org.egovframe.rte`, and `egovframe-vscode-initializr`; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-token error.
 - GREEN: added metadata-only eGovFrame project signal detection and schema docs; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
 - Safety note: detection checks path existence and literal markers only; it does not store raw `pom.xml` or VS Code config contents.
+
+## 2026-06-20 Goal 4 Public-Sector Policy Template
+
+- RED: updated `scripts/validate-project.mjs` to require `examples/egovframe5/policy-template.json` and `docs/policy-template.md`; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-template error.
+- GREEN: added the advisory eGovFrame 5.0 public-sector review policy template and usage documentation; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
+- Validation passed: `scripts/agent-harness.sh`.
+- Safety note: the template is advisory only and does not mutate tools, block execution, upload reports, or claim official eGovFrame certification.

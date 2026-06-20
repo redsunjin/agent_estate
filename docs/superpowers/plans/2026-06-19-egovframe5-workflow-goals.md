@@ -197,7 +197,7 @@ Expected: both commands pass.
 - Create: `docs/policy-template.md`
 - Modify: `scripts/validate-project.mjs`
 
-- [ ] **Step 1: Add policy template**
+- [x] **Step 1: Add policy template**
 
 Create `examples/egovframe5/policy-template.json` with allowed levels and review-required surfaces:
 
@@ -224,11 +224,11 @@ Create `examples/egovframe5/policy-template.json` with allowed levels and review
 }
 ```
 
-- [ ] **Step 2: Document policy use**
+- [x] **Step 2: Document policy use**
 
 Create `docs/policy-template.md` explaining how to review `ok`, `review`, `risky`, and `unknown` findings.
 
-- [ ] **Step 3: Validate**
+- [x] **Step 3: Validate**
 
 Run:
 

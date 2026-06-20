@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "0.1",
+  "name": "egovframe5-public-sector-review",
+  "defaultAction": "review",
+  "reviewRequiredSurfaces": [
+    "shell",
+    "filesystem",
+    "network",
+    "external_send",
+    "database",
+    "secrets",
+    "admin_permission",
+    "unknown"
+  ],
+  "notes": [
+    "This template is advisory.",
+    "It does not mutate tools or block execution.",
+    "Human approval remains required for review and risky findings."
+  ]
+}

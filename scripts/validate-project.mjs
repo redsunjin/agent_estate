@@ -32,6 +32,8 @@ const requiredFiles = [
   "packages/collector/package.json",
   "packages/collector/src/index.ts",
   "packages/collector/fixtures/sample-environment.json",
+  "examples/egovframe5/policy-template.json",
+  "docs/policy-template.md",
   "scripts/generate-fixture-report.mjs",
   "scripts/generate-readonly-report.mjs",
   "scripts/policy-classifier.mjs",
@@ -51,6 +53,13 @@ assert(rootPackage.workspaces.includes("apps/*"), "Root workspaces must include 
 assert(rootPackage.workspaces.includes("packages/*"), "Root workspaces must include packages/*.");
 assert(rootPackage.scripts?.check === "node scripts/validate-project.mjs", "Root check script must run project validation.");
 assert(rootPackage.scripts?.["discovery:report"] === "node scripts/generate-readonly-report.mjs", "Root discovery script must run read-only discovery report generation.");
+
+const egovFramePolicyTemplate = readJson("examples/egovframe5/policy-template.json");
+assert(egovFramePolicyTemplate.name === "egovframe5-public-sector-review", "eGovFrame policy template must use the expected name.");
+assert(egovFramePolicyTemplate.defaultAction === "review", "eGovFrame policy template must default to review.");
+for (const requiredSurface of ["shell", "filesystem", "network", "external_send", "database", "secrets", "admin_permission", "unknown"]) {
+  assert(egovFramePolicyTemplate.reviewRequiredSurfaces?.includes(requiredSurface), `eGovFrame policy template missing review surface: ${requiredSurface}`);
+}
 
 const extensionPackage = readJson("apps/vscode-extension/package.json");
 const commands = extensionPackage.contributes?.commands ?? [];

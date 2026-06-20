@@ -32,3 +32,6 @@ The report also concluded that the project should first become a working VS Code
 - eGovFrame AI RAG: https://github.com/eGovFramework/egovframe-ai-rag
 - eGovFrame VS Code Initializr: https://github.com/eGovFramework/egovframe-vscode-initializr
 
+## Project-Local Baseline
+
+The current eGovFrame 5.0 runtime, development-environment, VS Code Initializr, and compatibility-confirmation facts are summarized in [eGovFrame 5.0 Baseline](egovframe5-baseline.md). Refresh that file before public release, contribution messaging, or compatibility-readiness work.

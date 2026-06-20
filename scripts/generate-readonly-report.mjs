@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { accessSync, constants, existsSync, mkdirSync, statSync, writeFileSync } from "node:fs";
+import { accessSync, constants, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -60,6 +60,21 @@ function readableDirectory(itemPath) {
   }
 }
 
+function fileContainsLiteral(itemPath, literal) {
+  try {
+    if (!readableFile(itemPath)) {
+      return false;
+    }
+    const fileSize = statSync(itemPath).size;
+    if (fileSize > 1024 * 1024) {
+      return false;
+    }
+    return readFileSync(itemPath, "utf8").includes(literal);
+  } catch {
+    return false;
+  }
+}
+
 function findExecutable(commandName) {
   for (const entry of pathEntries) {
     const candidate = path.join(entry, commandName);
@@ -83,11 +98,12 @@ function detectedDirectoryCandidates(candidates) {
 
 function projectSignals() {
   const signals = [];
+  const pomPath = path.join(root, "pom.xml");
 
   for (const candidate of [
     { kind: "workspace-config", label: "Agent Estate workspace report directory", path: path.join(root, ".agent-estate") },
     { kind: "workspace-config", label: "VS Code workspace settings", path: path.join(root, ".vscode/settings.json") },
-    { kind: "pom.xml", label: "Maven project descriptor", path: path.join(root, "pom.xml") }
+    { kind: "egovframe-pom", label: "Maven pom.xml candidate for eGovFrame dependency check", path: pomPath }
   ]) {
     if (readableFile(candidate.path) || readableDirectory(candidate.path)) {
       signals.push({
@@ -99,7 +115,39 @@ function projectSignals() {
     }
   }
 
+  if (fileContainsLiteral(pomPath, "org.egovframe.rte")) {
+    signals.push({
+      kind: "egovframe-dependency",
+      label: "eGovFrame runtime Maven dependency marker",
+      path: safeRelativeOrAbsolute(pomPath),
+      evidence: "literal-match:org.egovframe.rte"
+    });
+  }
+
+  for (const candidate of [
+    { path: path.join(root, ".vscode/egovframe-initializr.json"), evidence: "path-exists" },
+    { path: path.join(root, ".vscode/extensions.json"), evidence: "literal-match:egovframe-vscode-initializr", literal: "egovframe-vscode-initializr" }
+  ]) {
+    const detected = candidate.literal
+      ? fileContainsLiteral(candidate.path, candidate.literal)
+      : readableFile(candidate.path);
+    if (detected) {
+      signals.push({
+        kind: "egovframe-vscode-initializr",
+        label: "eGovFrame VS Code Initializr workspace marker",
+        path: safeRelativeOrAbsolute(candidate.path),
+        evidence: candidate.evidence
+      });
+    }
+  }
+
   return signals;
+}
+
+function hasStrongEgovFrameSignal(signals) {
+  return signals.some((signal) =>
+    ["egovframe-dependency", "egovframe-vscode-initializr"].includes(signal.kind)
+  );
 }
 
 function discoverOpenClawPlugins() {
@@ -236,7 +284,7 @@ function buildReport() {
     environment: {
       platform: process.platform,
       homeDirectory,
-      workspaceType: signals.some((signal) => signal.kind === "pom.xml" || signal.kind === "egovframe-dependency") ? "egovframe" : "general",
+      workspaceType: hasStrongEgovFrameSignal(signals) ? "egovframe" : "general",
       detectedProjectSignals: signals
     },
     agents,
@@ -274,7 +322,7 @@ function buildReport() {
       }
     ],
     egovFrameChecklist: [
-      checklistItem("project-signal", "eGovFrame project signal detected", signals.some((signal) => signal.kind === "pom.xml" || signal.kind === "egovframe-dependency") ? "pass" : "review", [evidence("manual-note", "Read-only discovery checked workspace project markers")]),
+      checklistItem("project-signal", "eGovFrame project signal detected", hasStrongEgovFrameSignal(signals) ? "pass" : "review", [evidence("manual-note", "Read-only discovery checked workspace project markers")]),
       checklistItem("read-only-scan", "Scan is read-only", "pass", [evidence("manual-note", "Discovery uses path existence and executable metadata checks only")]),
       checklistItem("secret-redaction", "Secrets are not collected", "pass", [evidence("manual-note", "Discovery records no config values or content excerpts")]),
       checklistItem("external-send-review", "External send surfaces require review", "review", [evidence("manual-note", "External send behavior is not executed or tested")]),

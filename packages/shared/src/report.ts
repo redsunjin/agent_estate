@@ -68,7 +68,13 @@ export interface EnvironmentSummary {
 }
 
 export interface ProjectSignal {
-  readonly kind: "pom.xml" | "egovframe-dependency" | "template-marker" | "workspace-config" | "unknown";
+  readonly kind:
+    | "egovframe-pom"
+    | "egovframe-dependency"
+    | "egovframe-vscode-initializr"
+    | "template-marker"
+    | "workspace-config"
+    | "unknown";
   readonly label: string;
   readonly path?: string;
   readonly evidence?: string;

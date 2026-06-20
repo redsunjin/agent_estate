@@ -117,7 +117,9 @@ for (const requiredToken of [
   "PolicyClassificationSummary",
   "EGOVFRAME_CHECKLIST_ITEM_IDS",
   "RISK_LEVELS",
-  "RISK_SURFACES"
+  "RISK_SURFACES",
+  "egovframe-pom",
+  "egovframe-vscode-initializr"
 ]) {
   assert(reportSchemaSource.includes(requiredToken), `Report schema missing required token: ${requiredToken}`);
 }
@@ -128,9 +130,21 @@ if (args.has("--smoke")) {
     "classifyDiscoveredSurface",
     "policyClassificationSummary",
     "policy-classification",
-    "Policy classification"
+    "Policy classification",
+    "egovframe-pom",
+    "org.egovframe.rte",
+    "egovframe-vscode-initializr"
   ]) {
-    assert(readonlySource.includes(requiredToken), `Read-only report missing policy classification token: ${requiredToken}`);
+    assert(readonlySource.includes(requiredToken), `Read-only report missing eGovFrame project signal token: ${requiredToken}`);
+  }
+
+  const reportSchemaDoc = readFileSync(path.join(root, "docs/report-schema.md"), "utf8");
+  for (const requiredToken of [
+    "egovframe-pom",
+    "org.egovframe.rte",
+    "egovframe-vscode-initializr"
+  ]) {
+    assert(reportSchemaDoc.includes(requiredToken), `Report schema docs missing eGovFrame project signal token: ${requiredToken}`);
   }
 
   const extensionSource = readFileSync(path.join(root, "apps/vscode-extension/src/extension.ts"), "utf8");

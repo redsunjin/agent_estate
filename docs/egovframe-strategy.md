@@ -6,6 +6,8 @@ Agent Estate should start as an independent open-source VS Code extension that s
 
 Do not start by asking eGovFrame to accept a large runtime feature. First build evidence that the extension is useful.
 
+Use [eGovFrame 5.0 Baseline](egovframe5-baseline.md) as the project-local reference for runtime, development-environment, VS Code Initializr, and compatibility-confirmation boundaries.
+
 ## Why eGovFrame Fits
 
 The 2026 eGovFrame contribution notice includes an idea category related to AI agents, LLM integration, and MCP proposals. That makes the topic highly relevant, but the timing should be controlled.
@@ -54,6 +56,7 @@ Submit only after:
 - a report can be exported
 - a VS Code command or panel exists
 - the eGovFrame 5.0 workflow is documented
+- the eGovFrame 5.0 baseline is checked against current official sources
 - the project has a clean open-source README and license direction
 
 ## First Public Message
@@ -67,4 +70,3 @@ Avoid claiming:
 - official eGovFrame certification
 - replacement for endpoint security
 - automatic compliance
-

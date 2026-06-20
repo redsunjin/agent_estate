@@ -71,3 +71,23 @@ Record RED/GREEN evidence and TDD exceptions here.
 - RED: updated `scripts/validate-project.mjs` to require VS Code scan summary UX tokens; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-extension-token error.
 - GREEN: added report summary parsing and scan completion message with report path, review count, risky count, and unknown count; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
 - Safety note: VS Code UX reads only the generated local report JSON and does not read additional config files.
+
+## 2026-06-20 Goal 1 eGovFrame Workflow Pack
+
+- Phase: documentation-only workflow pack.
+- TDD exception: no runtime behavior or validation logic changed in this goal.
+- Validation target: `scripts/agent-harness.sh`.
+- Validation passed: `scripts/agent-harness.sh`.
+
+## 2026-06-20 Goal 2 eGovFrame 5.0 Baseline
+
+- Phase: documentation-only official baseline.
+- TDD exception: no runtime behavior or validation logic changed in this goal.
+- Validation target: `scripts/agent-harness.sh`.
+- Validation passed: `scripts/agent-harness.sh`.
+
+## 2026-06-20 Goal 3 eGovFrame Project Detection Metadata
+
+- RED: updated `scripts/validate-project.mjs` to require `egovframe-pom`, `org.egovframe.rte`, and `egovframe-vscode-initializr`; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-token error.
+- GREEN: added metadata-only eGovFrame project signal detection and schema docs; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
+- Safety note: detection checks path existence and literal markers only; it does not store raw `pom.xml` or VS Code config contents.

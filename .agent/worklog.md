@@ -118,3 +118,35 @@
 - Added completion message with report path plus review, risky, and unknown counts.
 - Kept the command read-only and local; no report upload or config mutation was added.
 - Verified focused RED/GREEN with `scripts/test-red.sh` and `scripts/test-green.sh` around `npm run smoke`.
+
+## 2026-06-20T00:00:00+0900
+
+- Started Goal 1 from `docs/superpowers/plans/2026-06-19-egovframe5-workflow-goals.md`.
+- Added `examples/egovframe5/README.md` with the eGovFrame 5.0 Agent Estate workflow.
+- Added `examples/egovframe5/agent-estate-checklist.md` for public-sector review items.
+- Added `examples/egovframe5/report-location.md` for generated report handling and redaction rules.
+- Updated `docs/mvp-plan.md` to mark the initial eGovFrame workflow pack complete.
+- Recorded the documentation-only TDD exception in `.agent/test-log.md`.
+- Verified with `scripts/agent-harness.sh`.
+- Next goal is the official eGovFrame 5.0 baseline reference document.
+
+## 2026-06-20T15:23:27+0900
+
+- Started Goal 2 from `docs/superpowers/plans/2026-06-19-egovframe5-workflow-goals.md`.
+- Verified current eGovFrame 5.0 facts from official eGovFrame portal pages and eGovFramework GitHub repositories.
+- Added `docs/egovframe5-baseline.md` with runtime, development environment, VS Code Initializr, and compatibility-confirmation boundaries.
+- Linked the baseline from `docs/egovframe-strategy.md` and `docs/source-report.md`.
+- Recorded the documentation-only TDD exception in `.agent/test-log.md`.
+- Verified with `scripts/agent-harness.sh`.
+- Next goal is eGovFrame project detection metadata.
+
+## 2026-06-20T15:40:23+0900
+
+- Started Goal 3 from `docs/superpowers/plans/2026-06-19-egovframe5-workflow-goals.md`.
+- Added RED validation for `egovframe-pom`, `org.egovframe.rte`, and `egovframe-vscode-initializr` project detection tokens.
+- Confirmed RED with `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh`.
+- Implemented metadata-only eGovFrame project signals in `scripts/generate-readonly-report.mjs`.
+- Updated `packages/shared/src/report.ts` and `docs/report-schema.md` so project signal kinds match the report contract.
+- Confirmed GREEN with `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh`.
+- Verified with `scripts/agent-harness.sh`.
+- Next goal is the public-sector policy template.

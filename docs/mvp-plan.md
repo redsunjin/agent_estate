@@ -63,6 +63,8 @@ Example policy questions:
 
 Add an `examples/egovframe5` workflow that shows how a public-sector project can keep an AI/MCP governance report alongside development artifacts.
 
+Status: completed as a workflow documentation pack with review checklist and report-location guidance. Project detection and policy templates remain later goals.
+
 ## Practical Next Steps
 
 1. Create a collector package skeleton.
@@ -74,4 +76,4 @@ Add an `examples/egovframe5` workflow that shows how a public-sector project can
 7. Add policy classification for discovered surfaces. Done for rule-based read-only metadata classification.
 8. Improve Markdown report quality. Done for review-first summary and audit checklist wording.
 9. Add minimal VS Code scan result UX. Done for report path and review/risky/unknown counts.
-10. Add an eGovFrame checklist document.
+10. Add an eGovFrame checklist document. Done for the initial workflow pack.

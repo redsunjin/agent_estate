@@ -56,6 +56,16 @@ The first checklist IDs are:
 - `human-approval-path`
 - `audit-report-export`
 
+## Project Signals
+
+Read-only discovery can record eGovFrame 5.0 workspace signals without storing configuration contents:
+
+- `egovframe-pom`: a `pom.xml` path exists and can be checked as a Maven project candidate.
+- `egovframe-dependency`: an intentionally readable project POM contains the literal `org.egovframe.rte`.
+- `egovframe-vscode-initializr`: a VS Code workspace marker or extension recommendation indicates eGovFrame VS Code Initializr usage.
+
+Only `egovframe-dependency` and `egovframe-vscode-initializr` are strong enough to classify `environment.workspaceType` as `egovframe`. A plain `egovframe-pom` signal remains a review candidate.
+
 ## Next Use
 
-Slice 3 should read fixture data, normalize it into `AgentEstateReport`, and write `.agent-estate/report.json`.
+Read-only discovery should write `.agent-estate/report.json`, preserve secret-safe evidence, and avoid storing raw `pom.xml` or VS Code config contents.

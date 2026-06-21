@@ -14,8 +14,9 @@
     "check": "node scripts/validate-project.mjs",
     "fixture:report": "node scripts/generate-fixture-report.mjs",
     "discovery:report": "node scripts/generate-readonly-report.mjs",
+    "egovframe:fixture-report": "node scripts/check-egovframe-fixture-report.mjs",
     "report:markdown": "node scripts/render-markdown-report.mjs",
-    "smoke": "node scripts/validate-project.mjs --smoke && npm run build && npm run fixture:report && npm run report:markdown -- --check && npm run discovery:report -- --check"
+    "smoke": "node scripts/validate-project.mjs --smoke && npm run build && npm run fixture:report && npm run report:markdown -- --check && npm run discovery:report -- --check && npm run egovframe:fixture-report"
   },
   "engines": {
     "node": ">=20"

@@ -32,11 +32,13 @@ const requiredFiles = [
   "packages/collector/package.json",
   "packages/collector/src/index.ts",
   "packages/collector/fixtures/sample-environment.json",
+  "examples/egovframe5/sample-project/pom.xml",
   "examples/egovframe5/policy-template.json",
   "docs/policy-template.md",
   "docs/contribution-readiness.md",
   "docs/compatibility-readiness.md",
   "scripts/build-vscode-extension.mjs",
+  "scripts/check-egovframe-fixture-report.mjs",
   "scripts/generate-fixture-report.mjs",
   "scripts/generate-readonly-report.mjs",
   "scripts/policy-classifier.mjs",
@@ -57,6 +59,8 @@ assert(rootPackage.workspaces.includes("packages/*"), "Root workspaces must incl
 assert(rootPackage.scripts?.check === "node scripts/validate-project.mjs", "Root check script must run project validation.");
 assert(rootPackage.scripts?.build === "npm --workspace @agent-estate/vscode-extension run build", "Root build script must build the VS Code extension.");
 assert(rootPackage.scripts?.["discovery:report"] === "node scripts/generate-readonly-report.mjs", "Root discovery script must run read-only discovery report generation.");
+assert(rootPackage.scripts?.["egovframe:fixture-report"] === "node scripts/check-egovframe-fixture-report.mjs", "Root eGovFrame fixture report script must run fixture detection validation.");
+assert(rootPackage.scripts?.smoke?.includes("npm run egovframe:fixture-report"), "Root smoke script must include eGovFrame fixture detection validation.");
 
 const egovFramePolicyTemplate = readJson("examples/egovframe5/policy-template.json");
 assert(egovFramePolicyTemplate.name === "egovframe5-public-sector-review", "eGovFrame policy template must use the expected name.");
@@ -153,6 +157,8 @@ if (args.has("--smoke")) {
   for (const requiredToken of [
     "classifyDiscoveredSurface",
     "policyClassificationSummary",
+    "AGENT_ESTATE_DISCOVERY_ROOT",
+    "--expect-egovframe",
     "policy-classification",
     "Policy classification",
     "egovframe-pom",
@@ -166,9 +172,28 @@ if (args.has("--smoke")) {
   for (const requiredToken of [
     "egovframe-pom",
     "org.egovframe.rte",
-    "egovframe-vscode-initializr"
+    "egovframe-vscode-initializr",
+    "sample-project/pom.xml"
   ]) {
     assert(reportSchemaDoc.includes(requiredToken), `Report schema docs missing eGovFrame project signal token: ${requiredToken}`);
+  }
+
+  const egovFrameFixturePom = readFileSync(path.join(root, "examples/egovframe5/sample-project/pom.xml"), "utf8");
+  for (const requiredToken of [
+    "org.egovframe.rte",
+    "5.0.0",
+    "<project"
+  ]) {
+    assert(egovFrameFixturePom.includes(requiredToken), `eGovFrame fixture POM missing required token: ${requiredToken}`);
+  }
+
+  const egovFrameFixtureCheckSource = readFileSync(path.join(root, "scripts/check-egovframe-fixture-report.mjs"), "utf8");
+  for (const requiredToken of [
+    "AGENT_ESTATE_DISCOVERY_ROOT",
+    "--expect-egovframe",
+    "sample-project"
+  ]) {
+    assert(egovFrameFixtureCheckSource.includes(requiredToken), `eGovFrame fixture validation script missing required token: ${requiredToken}`);
   }
 
   const contributionReadinessDoc = readFileSync(path.join(root, "docs/contribution-readiness.md"), "utf8");

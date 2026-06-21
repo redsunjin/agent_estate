@@ -9,13 +9,22 @@ import {
   policyEvidence
 } from "./policy-classifier.mjs";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = new Set(process.argv.slice(2));
-const outputDirectory = path.join(root, ".agent-estate");
+const workspaceRoot = resolveDiscoveryRoot();
+const outputDirectory = path.join(repositoryRoot, ".agent-estate");
 const outputPath = path.join(outputDirectory, "report.json");
 
 const homeDirectory = os.homedir();
 const pathEntries = (process.env.PATH ?? "").split(path.delimiter).filter(Boolean);
+
+function resolveDiscoveryRoot() {
+  const configuredRoot = process.env.AGENT_ESTATE_DISCOVERY_ROOT;
+  if (!configuredRoot) {
+    return repositoryRoot;
+  }
+  return path.resolve(repositoryRoot, configuredRoot);
+}
 
 function evidence(kind, label, itemPath) {
   return {
@@ -36,11 +45,11 @@ function withPolicyClassification(item, type) {
   };
 }
 
-function safeRelativeOrAbsolute(itemPath) {
+function safeRelativeOrAbsolute(itemPath, basePath = workspaceRoot) {
   if (!itemPath) {
     return undefined;
   }
-  const relative = path.relative(root, itemPath);
+  const relative = path.relative(basePath, itemPath);
   return relative && !relative.startsWith("..") && !path.isAbsolute(relative) ? relative : itemPath;
 }
 
@@ -98,11 +107,11 @@ function detectedDirectoryCandidates(candidates) {
 
 function projectSignals() {
   const signals = [];
-  const pomPath = path.join(root, "pom.xml");
+  const pomPath = path.join(workspaceRoot, "pom.xml");
 
   for (const candidate of [
-    { kind: "workspace-config", label: "Agent Estate workspace report directory", path: path.join(root, ".agent-estate") },
-    { kind: "workspace-config", label: "VS Code workspace settings", path: path.join(root, ".vscode/settings.json") },
+    { kind: "workspace-config", label: "Agent Estate workspace report directory", path: path.join(workspaceRoot, ".agent-estate") },
+    { kind: "workspace-config", label: "VS Code workspace settings", path: path.join(workspaceRoot, ".vscode/settings.json") },
     { kind: "egovframe-pom", label: "Maven pom.xml candidate for eGovFrame dependency check", path: pomPath }
   ]) {
     if (readableFile(candidate.path) || readableDirectory(candidate.path)) {
@@ -125,8 +134,8 @@ function projectSignals() {
   }
 
   for (const candidate of [
-    { path: path.join(root, ".vscode/egovframe-initializr.json"), evidence: "path-exists" },
-    { path: path.join(root, ".vscode/extensions.json"), evidence: "literal-match:egovframe-vscode-initializr", literal: "egovframe-vscode-initializr" }
+    { path: path.join(workspaceRoot, ".vscode/egovframe-initializr.json"), evidence: "path-exists" },
+    { path: path.join(workspaceRoot, ".vscode/extensions.json"), evidence: "literal-match:egovframe-vscode-initializr", literal: "egovframe-vscode-initializr" }
   ]) {
     const detected = candidate.literal
       ? fileContainsLiteral(candidate.path, candidate.literal)
@@ -178,8 +187,8 @@ function discoverMcpServers() {
     { name: "Claude Desktop MCP config", path: path.join(homeDirectory, "Library/Application Support/Claude/claude_desktop_config.json") },
     { name: "Cursor MCP config", path: path.join(homeDirectory, ".cursor/mcp.json") },
     { name: "VS Code MCP config", path: path.join(homeDirectory, "Library/Application Support/Code/User/mcp.json") },
-    { name: "Workspace MCP config", path: path.join(root, ".vscode/mcp.json") },
-    { name: "Agent Estate workspace settings", path: path.join(root, ".agent-estate/settings.json") }
+    { name: "Workspace MCP config", path: path.join(workspaceRoot, ".vscode/mcp.json") },
+    { name: "Agent Estate workspace settings", path: path.join(workspaceRoot, ".agent-estate/settings.json") }
   ]);
 
   return candidates.map((item, index) =>
@@ -278,7 +287,7 @@ function buildReport() {
       generatedAt: new Date().toISOString(),
       generator: "agent-estate",
       generatorVersion: "0.1.0",
-      workspaceRoot: root,
+      workspaceRoot,
       source: "read-only-discovery"
     },
     environment: {
@@ -371,6 +380,14 @@ function assertCheck(report) {
   if (serialized.includes("apiKey") || serialized.includes("password") || serialized.includes("tokenValue")) {
     throw new Error("Read-only report appears to include secret-like values.");
   }
+  if (args.has("--expect-egovframe")) {
+    if (report.environment.workspaceType !== "egovframe") {
+      throw new Error("Expected eGovFrame fixture workspace to be classified as egovframe.");
+    }
+    if (!report.environment.detectedProjectSignals.some((signal) => signal.kind === "egovframe-dependency" && signal.evidence === "literal-match:org.egovframe.rte")) {
+      throw new Error("Expected eGovFrame fixture workspace to include an org.egovframe.rte dependency signal.");
+    }
+  }
 }
 
 const report = buildReport();
@@ -381,5 +398,5 @@ if (args.has("--check")) {
 } else {
   mkdirSync(outputDirectory, { recursive: true });
   writeFileSync(outputPath, `${JSON.stringify(report, null, 2)}\n`);
-  console.log(`Wrote ${path.relative(root, outputPath)}`);
+  console.log(`Wrote ${path.relative(repositoryRoot, outputPath)}`);
 }

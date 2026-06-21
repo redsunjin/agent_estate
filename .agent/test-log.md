@@ -114,3 +114,9 @@ Record RED/GREEN evidence and TDD exceptions here.
 - GREEN: added contribution readiness and compatibility readiness notes and linked them from `README.md`; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
 - Validation passed: `npm run check`, `npm run smoke`, and `scripts/agent-harness.sh`.
 - Safety note: readiness language separates contribution recognition, official repository inclusion, and compatibility confirmation, and explicitly says Agent Estate is not currently certified.
+
+## 2026-06-21 eGovFrame Sample POM Fixture Detection
+
+- RED: updated `scripts/validate-project.mjs` to require `examples/egovframe5/sample-project/pom.xml`, `scripts/check-egovframe-fixture-report.mjs`, and fixture smoke wiring; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-fixture error.
+- GREEN: added a sanitized eGovFrame 5.0 sample POM, fixture report validator, `AGENT_ESTATE_DISCOVERY_ROOT` support, and `--expect-egovframe` discovery assertion; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
+- Safety note: fixture discovery reads only the sample workspace `pom.xml` literal marker and stores path/evidence metadata, not raw POM contents.

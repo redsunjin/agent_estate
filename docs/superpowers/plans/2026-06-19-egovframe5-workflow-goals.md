@@ -250,11 +250,11 @@ Expected: harness completes without unexpected failures.
 - Create or modify: build/test config files only if dependency installation is approved.
 - Modify: `.agent/test-log.md`
 
-- [ ] **Step 1: Decide dependency boundary**
+- [x] **Step 1: Decide dependency boundary**
 
 If adding TypeScript or VS Code test dependencies requires network installation, ask for approval before running install commands.
 
-- [ ] **Step 2: Add build validation**
+- [x] **Step 2: Add build validation**
 
 Add a root script such as:
 
@@ -264,7 +264,7 @@ Add a root script such as:
 
 Only add this after the extension package has a real build command.
 
-- [ ] **Step 3: Validate**
+- [x] **Step 3: Validate**
 
 Run:
 
@@ -287,7 +287,7 @@ Expected: commands pass, or dependency/network limitations are recorded in `.age
 - Create: `docs/compatibility-readiness.md`
 - Modify: `README.md`
 
-- [ ] **Step 1: Add contribution readiness note**
+- [x] **Step 1: Add contribution readiness note**
 
 Create `docs/contribution-readiness.md` with these tracks:
 
@@ -296,7 +296,7 @@ Create `docs/contribution-readiness.md` with these tracks:
 - Possible official repository reference.
 - Future contribution participation.
 
-- [ ] **Step 2: Add compatibility readiness note**
+- [x] **Step 2: Add compatibility readiness note**
 
 Create `docs/compatibility-readiness.md` separating:
 
@@ -306,7 +306,7 @@ Create `docs/compatibility-readiness.md` separating:
 
 Explicitly state that Agent Estate is not currently certified.
 
-- [ ] **Step 3: Validate**
+- [x] **Step 3: Validate**
 
 Run:
 

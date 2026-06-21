@@ -162,3 +162,33 @@
 - Confirmed GREEN with `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh`.
 - Verified with `scripts/agent-harness.sh`.
 - Next goal is VS Code build and runtime readiness.
+
+## 2026-06-20T22:01:56+0900
+
+- Started Goal 5 from `docs/superpowers/plans/2026-06-19-egovframe5-workflow-goals.md`.
+- Confirmed the first build slice can proceed without installing external dependencies.
+- Added RED validation for root and extension build commands plus `scripts/build-vscode-extension.mjs`.
+- Confirmed RED with `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh`.
+- Added a dependency-free build script that emits `apps/vscode-extension/dist/extension.js` from `apps/vscode-extension/src/extension.ts` and syntax-checks the output.
+- Added root and extension package `build` scripts and wired root smoke to run build.
+- Confirmed GREEN with `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh`.
+- Verified with `npm run check`, `npm run smoke`, and `scripts/agent-harness.sh`.
+- Next goal is contribution and compatibility readiness notes.
+
+## 2026-06-20T23:03:00+0900
+
+- Started Goal 6 from `docs/superpowers/plans/2026-06-19-egovframe5-workflow-goals.md`.
+- Added RED validation for contribution and compatibility readiness documents.
+- Confirmed RED with `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh`.
+- Added `docs/contribution-readiness.md` with open-source release, eGovFrame sample/docs, official repository reference, and contribution participation tracks.
+- Added `docs/compatibility-readiness.md` separating contribution recognition, official repository inclusion, and compatibility confirmation.
+- Linked the new readiness documents from `README.md`.
+- Confirmed GREEN with `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh`.
+- Verified with `npm run check`, `npm run smoke`, and `scripts/agent-harness.sh`.
+- Remaining action is final review plus commit/sync when requested.
+
+## 2026-06-21T11:23:55+0900
+
+- Prepared the completed Goal 5-6 slice for commit and remote sync.
+- Updated the local status boundary to mark MVP Goals 1-6 complete.
+- Next recommended hardening slice is either a concrete eGovFrame sample POM detection fixture or a VS Code Extension Host smoke check.

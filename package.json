@@ -10,11 +10,12 @@
     "packages/*"
   ],
   "scripts": {
+    "build": "npm --workspace @agent-estate/vscode-extension run build",
     "check": "node scripts/validate-project.mjs",
     "fixture:report": "node scripts/generate-fixture-report.mjs",
     "discovery:report": "node scripts/generate-readonly-report.mjs",
     "report:markdown": "node scripts/render-markdown-report.mjs",
-    "smoke": "node scripts/validate-project.mjs --smoke && npm run fixture:report && npm run report:markdown -- --check && npm run discovery:report -- --check"
+    "smoke": "node scripts/validate-project.mjs --smoke && npm run build && npm run fixture:report && npm run report:markdown -- --check && npm run discovery:report -- --check"
   },
   "engines": {
     "node": ">=20"

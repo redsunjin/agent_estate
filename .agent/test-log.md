@@ -98,3 +98,19 @@ Record RED/GREEN evidence and TDD exceptions here.
 - GREEN: added the advisory eGovFrame 5.0 public-sector review policy template and usage documentation; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
 - Validation passed: `scripts/agent-harness.sh`.
 - Safety note: the template is advisory only and does not mutate tools, block execution, upload reports, or claim official eGovFrame certification.
+
+## 2026-06-20 Goal 5 VS Code Build And Runtime Readiness
+
+- RED: updated `scripts/validate-project.mjs` to require a VS Code extension build script and package build commands; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-build-script error.
+- Dependency boundary: no external dependencies were installed. Build readiness uses Node's built-in TypeScript type-stripping API when available and a source-specific fallback for the current extension command shell.
+- GREEN: added `scripts/build-vscode-extension.mjs`, root `npm run build`, and extension package `build`; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed and generated `apps/vscode-extension/dist/extension.js`.
+- Fallback validation passed: `env AGENT_ESTATE_FORCE_SIMPLE_TS_STRIP=1 npm run build`.
+- Validation passed: `npm run check`, `npm run smoke`, and `scripts/agent-harness.sh`.
+- Residual note: Node prints an experimental warning for `stripTypeScriptTypes`; a future TypeScript/esbuild setup may require explicit dependency approval.
+
+## 2026-06-20 Goal 6 Contribution And Compatibility Readiness
+
+- RED: updated `scripts/validate-project.mjs` to require `docs/contribution-readiness.md` and `docs/compatibility-readiness.md`; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-red.sh` failed with the expected missing-readiness-doc error.
+- GREEN: added contribution readiness and compatibility readiness notes and linked them from `README.md`; `FOCUSED_TEST_CMD='npm run smoke' scripts/test-green.sh` passed.
+- Validation passed: `npm run check`, `npm run smoke`, and `scripts/agent-harness.sh`.
+- Safety note: readiness language separates contribution recognition, official repository inclusion, and compatibility confirmation, and explicitly says Agent Estate is not currently certified.

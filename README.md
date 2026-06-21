@@ -48,6 +48,9 @@ agent-estate/
 - [MVP Plan](docs/mvp-plan.md)
 - [Architecture](docs/architecture.md)
 - [eGovFrame Strategy](docs/egovframe-strategy.md)
+- [eGovFrame 5.0 Baseline](docs/egovframe5-baseline.md)
+- [Contribution Readiness](docs/contribution-readiness.md)
+- [Compatibility Readiness](docs/compatibility-readiness.md)
 - [Source Report](docs/source-report.md)
 
 ## Source Report
@@ -55,4 +58,3 @@ agent-estate/
 The original feasibility report remains outside this project as a cross-project research archive:
 
 `/Users/Agent/ps-workspace/reports/public-sector/egovframe5-agent-estate-manager-contribution-feasibility-2026-06-06.md`
-

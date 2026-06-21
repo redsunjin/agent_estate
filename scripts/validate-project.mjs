@@ -34,6 +34,9 @@ const requiredFiles = [
   "packages/collector/fixtures/sample-environment.json",
   "examples/egovframe5/policy-template.json",
   "docs/policy-template.md",
+  "docs/contribution-readiness.md",
+  "docs/compatibility-readiness.md",
+  "scripts/build-vscode-extension.mjs",
   "scripts/generate-fixture-report.mjs",
   "scripts/generate-readonly-report.mjs",
   "scripts/policy-classifier.mjs",
@@ -52,6 +55,7 @@ assert(Array.isArray(rootPackage.workspaces), "Root package must define workspac
 assert(rootPackage.workspaces.includes("apps/*"), "Root workspaces must include apps/*.");
 assert(rootPackage.workspaces.includes("packages/*"), "Root workspaces must include packages/*.");
 assert(rootPackage.scripts?.check === "node scripts/validate-project.mjs", "Root check script must run project validation.");
+assert(rootPackage.scripts?.build === "npm --workspace @agent-estate/vscode-extension run build", "Root build script must build the VS Code extension.");
 assert(rootPackage.scripts?.["discovery:report"] === "node scripts/generate-readonly-report.mjs", "Root discovery script must run read-only discovery report generation.");
 
 const egovFramePolicyTemplate = readJson("examples/egovframe5/policy-template.json");
@@ -62,6 +66,7 @@ for (const requiredSurface of ["shell", "filesystem", "network", "external_send"
 }
 
 const extensionPackage = readJson("apps/vscode-extension/package.json");
+assert(extensionPackage.scripts?.build === "node ../../scripts/build-vscode-extension.mjs", "VS Code extension package must define a real build command.");
 const commands = extensionPackage.contributes?.commands ?? [];
 const commandIds = commands.map((command) => command.command);
 
@@ -134,6 +139,16 @@ for (const requiredToken of [
 }
 
 if (args.has("--smoke")) {
+  const buildSource = readFileSync(path.join(root, "scripts/build-vscode-extension.mjs"), "utf8");
+  for (const requiredToken of [
+    "stripTypeScriptTypes",
+    "apps/vscode-extension/src/extension.ts",
+    "apps/vscode-extension/dist/extension.js",
+    "Build completed"
+  ]) {
+    assert(buildSource.includes(requiredToken), `VS Code extension build script missing required token: ${requiredToken}`);
+  }
+
   const readonlySource = readFileSync(path.join(root, "scripts/generate-readonly-report.mjs"), "utf8");
   for (const requiredToken of [
     "classifyDiscoveredSurface",
@@ -154,6 +169,26 @@ if (args.has("--smoke")) {
     "egovframe-vscode-initializr"
   ]) {
     assert(reportSchemaDoc.includes(requiredToken), `Report schema docs missing eGovFrame project signal token: ${requiredToken}`);
+  }
+
+  const contributionReadinessDoc = readFileSync(path.join(root, "docs/contribution-readiness.md"), "utf8");
+  for (const requiredToken of [
+    "Open-source release readiness",
+    "eGovFrame sample/docs readiness",
+    "Possible official repository reference",
+    "Future contribution participation"
+  ]) {
+    assert(contributionReadinessDoc.includes(requiredToken), `Contribution readiness doc missing required section: ${requiredToken}`);
+  }
+
+  const compatibilityReadinessDoc = readFileSync(path.join(root, "docs/compatibility-readiness.md"), "utf8");
+  for (const requiredToken of [
+    "Contribution recognition",
+    "Official repository inclusion",
+    "Compatibility confirmation",
+    "Agent Estate is not currently certified"
+  ]) {
+    assert(compatibilityReadinessDoc.includes(requiredToken), `Compatibility readiness doc missing required section: ${requiredToken}`);
   }
 
   const extensionSource = readFileSync(path.join(root, "apps/vscode-extension/src/extension.ts"), "utf8");
